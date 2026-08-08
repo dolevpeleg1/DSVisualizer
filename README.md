@@ -1,66 +1,60 @@
 # DSVisualizer
 
-Interactive visualizer for data structures (stack, queue, array, tree, and more to come). Write simple operations in the editor, then **Run** or **Step** through them and watch the structure update.
+Interactive web app for learning data structures. You write simple operations in an editor, then **Run** or **Step** through them while an animated visualization updates for **stack**, **queue**, **array**, or **binary search tree**.
 
-## Quick start
+## What it does
+
+- Parse a small command DSL (`push(3)`, `enqueue(7)`, `insert(1, 5)`, …)
+- Execute operations into a frame timeline
+- Play or step through frames with line highlighting and status messages
+- Animate structure state (cells, tree nodes, highlights, errors)
+
+## Stack
+
+| Layer | Tech |
+| --- | --- |
+| UI | React 19, React Router, Framer Motion |
+| Styling | Tailwind CSS v4, CSS variables |
+| Editor | CodeMirror 6 (`@uiw/react-codemirror`) |
+| Tooling | Vite, TypeScript, Vitest, oxlint |
+
+Core logic lives under `src/structures/` (pure models) and `src/engine/` (parse + run). Visualizations are in `src/viz/`.
+
+## Local build
 
 ```bash
 npm install
-npm run dev
+npm run dev      # http://localhost:3000
+npm run build    # production bundle → dist/
+npm test         # unit tests
+npm run lint
 ```
 
-Open [http://localhost:3000](http://localhost:3000).
+Preview a production build with `npm run preview`.
 
-```bash
-npm test    # unit tests
-npm run build
-```
+Deploy by hosting `dist/` as a static site. For client routes like `/app`, configure an SPA fallback to `index.html` (Vercel rewrites, Netlify/`_redirects`, etc.).
 
-## How to use
+## AI usage
 
-1. Open the visualizer from the homepage.
-2. Pick **Stack**, **Queue**, **Array**, or **Tree** in the header.
-3. Edit the operation script (or keep the sample).
-4. Click **Step** to advance one operation, or **Run** to play through all.
-5. **Reset** restores the sample script for the current structure.
+This project was built with AI assistance (Cursor) plus substantial human direction and edits.
 
-The footer shows the current step / errors. The editor highlights the active line during playback and error lines on failure.
+**AI helped with**
 
-## Supported operations
+- Feature scaffolding (structures, parser/runner, visualizer UI, animations)
+- Matrix-themed homepage (falling glyphs) and visualizer chrome restyles
+- Editor theming, layout tweaks, and small UX fixes (e.g. queue Front/Back alignment)
+- README drafts and deploy notes
 
-Comments (`// ...`) and blank lines are ignored. Arguments are numbers.
+**Human work included**
 
-### Stack
+- Product direction and iteration
+- Manual CSS / theme token edits and visual polish in the browser
+- Reviewing, editing, and rejecting AI output
+- Running and validating behavior locally (dev server, interactions, tests)
+- Commit decisions and final ownership of the code
 
-- `push(value)`
-- `pop()`
-- `peek()`
+All shipped code was reviewed and adjusted by me.
 
-### Queue
+## Author
 
-- `enqueue(value)`
-- `dequeue()`
-- `front()`
-
-### Array
-
-- `append(value)`
-- `insert(index, value)`
-- `remove(index)`
-- `set(index, value)`
-- `get(index)`
-
-### Tree (binary search tree)
-
-- `insert(value)`
-- `delete(value)`
-- `find(value)`
-
-## Project layout
-
-- `src/structures/` — pure structure models
-- `src/engine/` — DSL parser + frame timeline runner
-- `src/viz/` — animated visualizations
-- `src/editor/` — CodeMirror editor
-- `src/pages/` — homepage + visualizer
-- `src/dsvisualizer.test.ts` — unit tests
+**[Dolev Peleg](https://github.com/dolevpeleg1)** 
