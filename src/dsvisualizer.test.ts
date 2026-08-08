@@ -167,14 +167,23 @@ describe('array', () => {
     let state = emptyArray()
     state = applyArray(state, { type: 'append', value: 1 }).next
 
-    expect(applyArray(state, { type: 'insert', index: 2, value: 9 }).event.kind).toBe(
-      'error',
-    )
-    expect(applyArray(state, { type: 'remove', index: 1 }).event.kind).toBe('error')
-    expect(applyArray(state, { type: 'set', index: -1, value: 9 }).event.kind).toBe(
-      'error',
-    )
-    expect(applyArray(state, { type: 'get', index: 5 }).event.kind).toBe('error')
+    const insert = applyArray(state, { type: 'insert', index: 2, value: 9 })
+    expect(insert.event.kind).toBe('error')
+    expect(insert.next.highlight).toEqual([2])
+    expect(insert.event.highlight).toEqual([2])
+
+    const remove = applyArray(state, { type: 'remove', index: 1 })
+    expect(remove.event.kind).toBe('error')
+    expect(remove.next.highlight).toEqual([1])
+
+    const set = applyArray(state, { type: 'set', index: -1, value: 9 })
+    expect(set.event.kind).toBe('error')
+    expect(set.next.highlight).toEqual([-1])
+
+    const get = applyArray(state, { type: 'get', index: 5 })
+    expect(get.event.kind).toBe('error')
+    expect(get.next.highlight).toEqual([5])
+    expect(get.next.error).toBeTruthy()
   })
 })
 

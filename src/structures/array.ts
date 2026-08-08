@@ -29,6 +29,7 @@ export function apply(state: Snapshot, op: ArrayOp): ApplyResult {
         return errorResult(
           items,
           `Index ${op.index} out of bounds for insert (length ${items.length})`,
+          [op.index],
         )
       }
       const nextItems = [
@@ -55,6 +56,7 @@ export function apply(state: Snapshot, op: ArrayOp): ApplyResult {
         return errorResult(
           items,
           `Index ${op.index} out of bounds for remove (length ${items.length})`,
+          [op.index],
         )
       }
       const value = items[op.index] as Value
@@ -80,6 +82,7 @@ export function apply(state: Snapshot, op: ArrayOp): ApplyResult {
         return errorResult(
           items,
           `Index ${op.index} out of bounds for set (length ${items.length})`,
+          [op.index],
         )
       }
       const nextItems = [...items]
@@ -103,6 +106,7 @@ export function apply(state: Snapshot, op: ArrayOp): ApplyResult {
         return errorResult(
           items,
           `Index ${op.index} out of bounds for get (length ${items.length})`,
+          [op.index],
         )
       }
       const value = items[op.index] as Value
@@ -133,9 +137,13 @@ function isValidInsertIndex(index: number, length: number): boolean {
   return Number.isInteger(index) && index >= 0 && index <= length
 }
 
-function errorResult(items: Value[], message: string): ApplyResult {
+function errorResult(
+  items: Value[],
+  message: string,
+  highlight?: number[],
+): ApplyResult {
   return {
-    next: { items: [...items], error: message },
-    event: { kind: 'error', message },
+    next: { items: [...items], error: message, highlight },
+    event: { kind: 'error', message, highlight },
   }
 }
