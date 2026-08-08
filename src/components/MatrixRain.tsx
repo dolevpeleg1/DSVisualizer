@@ -65,7 +65,7 @@ export function MatrixRain() {
       const dt = Math.min((time - lastTime) / 16.67, 2.5)
       lastTime = time
 
-      ctx.fillStyle = '#040806'
+      ctx.fillStyle = '#020403'
       ctx.fillRect(0, 0, width, height)
 
       ctx.font = `${fontSize}px "IBM Plex Mono", ui-monospace, monospace`
@@ -110,7 +110,7 @@ export function MatrixRain() {
 
     const paintStatic = () => {
       const { clientWidth: width, clientHeight: height } = canvas
-      ctx.fillStyle = '#040806'
+      ctx.fillStyle = '#020403'
       ctx.fillRect(0, 0, width, height)
       ctx.font = `${fontSize}px "IBM Plex Mono", ui-monospace, monospace`
       ctx.textBaseline = 'top'
@@ -126,7 +126,7 @@ export function MatrixRain() {
     if (reducedMotion.matches) {
       paintStatic()
     } else {
-      ctx.fillStyle = '#040806'
+      ctx.fillStyle = '#020403'
       ctx.fillRect(0, 0, canvas.clientWidth, canvas.clientHeight)
       lastTime = performance.now()
       frameId = requestAnimationFrame(draw)

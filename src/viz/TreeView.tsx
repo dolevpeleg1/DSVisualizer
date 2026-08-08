@@ -173,12 +173,12 @@ export function TreeView({ snapshot }: TreeViewProps) {
                 animate={{ opacity: 1, scale: 1 }}
                 exit={{ opacity: 0, scale: 0.55 }}
                 transition={NODE_ENTER}
-                className={`absolute flex items-center justify-center rounded-full border font-[family-name:var(--mono)] text-sm font-medium ${
+                className={`absolute flex items-center justify-center rounded-full border-2 font-[family-name:var(--mono)] text-sm font-medium text-[var(--text)] ${
                   error
-                    ? 'border-[var(--danger)] bg-[color-mix(in_srgb,var(--danger)_18%,var(--bg-elevated))] text-[var(--text)]'
+                    ? 'border-[var(--danger)] bg-[color-mix(in_srgb,var(--danger)_16%,var(--bg))] shadow-[0_0_14px_color-mix(in_srgb,var(--danger)_30%,transparent)]'
                     : active
-                      ? 'border-[var(--accent)] bg-[color-mix(in_srgb,var(--accent)_22%,var(--bg-elevated))] text-[var(--text)]'
-                      : 'border-[var(--border)] bg-[var(--bg-elevated)] text-[var(--text)]'
+                      ? 'border-[var(--accent)] bg-[color-mix(in_srgb,var(--accent)_14%,var(--bg))] shadow-[0_0_14px_color-mix(in_srgb,var(--accent)_28%,transparent)]'
+                      : 'border-[var(--border)] bg-[var(--bg-elevated)]'
                 }`}
                 style={{
                   width: NODE_SIZE,

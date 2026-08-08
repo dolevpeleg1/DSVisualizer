@@ -1,9 +1,10 @@
-import { useEffect, useMemo, useRef } from "react"
-import CodeMirror, { type ReactCodeMirrorRef } from "@uiw/react-codemirror"
-import { javascript } from "@codemirror/lang-javascript"
-import { oneDark } from "@codemirror/theme-one-dark"
-import { Decoration, EditorView, type DecorationSet } from "@codemirror/view"
-import { StateEffect, StateField } from "@codemirror/state"
+import { useEffect, useMemo, useRef } from 'react'
+import CodeMirror, { type ReactCodeMirrorRef } from '@uiw/react-codemirror'
+import { javascript } from '@codemirror/lang-javascript'
+import { HighlightStyle, syntaxHighlighting } from '@codemirror/language'
+import { tags as t } from '@lezer/highlight'
+import { Decoration, EditorView, type DecorationSet } from '@codemirror/view'
+import { StateEffect, StateField } from '@codemirror/state'
 
 type CodeEditorProps = {
   value: string
@@ -56,17 +57,70 @@ const highlightField = StateField.define<DecorationSet>({
   provide: (field) => EditorView.decorations.from(field),
 })
 
-const activeLineMark = Decoration.line({ class: "cm-ds-active-line" })
-const errorLineMark = Decoration.line({ class: "cm-ds-error-line" })
+const activeLineMark = Decoration.line({ class: 'cm-ds-active-line' })
+const errorLineMark = Decoration.line({ class: 'cm-ds-error-line' })
 
-const highlightTheme = EditorView.baseTheme({
-  ".cm-ds-active-line": {
-    backgroundColor: "color-mix(in srgb, var(--accent) 22%, transparent)",
+const matrixEditorTheme = EditorView.theme(
+  {
+    '&': {
+      backgroundColor: 'var(--bg)',
+      color: '#ffffff',
+      height: '100%',
+    },
+    '.cm-scroller': {
+      fontFamily: 'var(--mono)',
+    },
+    '.cm-content': {
+      caretColor: '#ffffff',
+    },
+    '&.cm-focused .cm-cursor': {
+      borderLeftColor: '#ffffff',
+    },
+    '&.cm-focused .cm-selectionBackground, .cm-selectionBackground, .cm-content ::selection':
+      {
+        backgroundColor: 'color-mix(in srgb, var(--accent) 28%, transparent)',
+      },
+    '.cm-gutters': {
+      backgroundColor: 'var(--bg-panel)',
+      color: 'rgba(255, 255, 255, 0.35)',
+      border: 'none',
+      borderRight: '1px solid var(--border)',
+    },
+    '.cm-activeLineGutter': {
+      backgroundColor: 'var(--bg-elevated)',
+      color: '#ffffff',
+    },
+    '.cm-activeLine': {
+      backgroundColor: 'color-mix(in srgb, var(--accent) 10%, transparent)',
+    },
+    '.cm-ds-active-line': {
+      backgroundColor: 'color-mix(in srgb, var(--accent) 22%, transparent) !important',
+    },
+    '.cm-ds-error-line': {
+      backgroundColor: 'color-mix(in srgb, var(--danger) 22%, transparent) !important',
+    },
   },
-  ".cm-ds-error-line": {
-    backgroundColor: "color-mix(in srgb, var(--danger) 18%, transparent)",
-  },
-})
+  { dark: true },
+)
+
+/** White-first syntax coloring — green is reserved for UI accents, not text. */
+const matrixHighlightStyle = HighlightStyle.define([
+  { tag: t.keyword, color: '#ffffff', fontWeight: '600' },
+  { tag: t.controlKeyword, color: '#ffffff', fontWeight: '600' },
+  { tag: t.operator, color: 'rgba(255, 255, 255, 0.75)' },
+  { tag: t.string, color: '#ffffff' },
+  { tag: t.number, color: '#ffffff' },
+  { tag: t.bool, color: '#ffffff' },
+  { tag: t.null, color: '#ffffff' },
+  { tag: t.comment, color: 'rgba(255, 255, 255, 0.4)' },
+  { tag: t.variableName, color: '#ffffff' },
+  { tag: t.function(t.variableName), color: '#ffffff' },
+  { tag: t.propertyName, color: '#ffffff' },
+  { tag: t.punctuation, color: 'rgba(255, 255, 255, 0.65)' },
+  { tag: t.bracket, color: 'rgba(255, 255, 255, 0.65)' },
+  { tag: t.meta, color: 'rgba(255, 255, 255, 0.5)' },
+  { tag: t.invalid, color: 'var(--danger)' },
+])
 
 export function CodeEditor({
   value,
@@ -77,7 +131,12 @@ export function CodeEditor({
 }: CodeEditorProps) {
   const editorRef = useRef<ReactCodeMirrorRef>(null)
   const extensions = useMemo(
-    () => [javascript(), highlightField, highlightTheme],
+    () => [
+      javascript(),
+      highlightField,
+      matrixEditorTheme,
+      syntaxHighlighting(matrixHighlightStyle),
+    ],
     [],
   )
 
@@ -94,7 +153,7 @@ export function CodeEditor({
       ref={editorRef}
       value={value}
       height="100%"
-      theme={oneDark}
+      theme="none"
       extensions={extensions}
       onChange={onChange}
       editable={!readOnly}

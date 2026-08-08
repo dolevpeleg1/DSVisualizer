@@ -84,7 +84,7 @@ export function HomePage() {
           >
             <Link
               to="/app"
-              className="inline-flex rounded bg-[var(--accent)] px-5 py-2.5 text-sm font-medium text-[var(--bg)] transition-colors hover:bg-[var(--accent-hover)]"
+              className="inline-flex rounded bg-[var(--accent)] px-5 py-2.5 text-sm font-medium text-[var(--text)] transition-colors hover:bg-[var(--accent-hover)]"
             >
               Open visualizer
             </Link>

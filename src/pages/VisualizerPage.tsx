@@ -223,29 +223,29 @@ export function VisualizerPage() {
   useEffect(() => () => clearPlaybackTimer(), [])
 
   return (
-    <div className="flex h-full min-h-0 flex-col">
+    <div className="flex h-full min-h-0 flex-col bg-[var(--bg)] font-[family-name:var(--mono)] text-[var(--text)]">
       <header className="flex items-center justify-between border-b border-[var(--border)] bg-[var(--bg-panel)] px-4 py-3">
         <div className="flex items-baseline gap-3">
           <Link
             to="/"
-            className="text-lg font-semibold tracking-tight text-[var(--text)] hover:text-[var(--accent)]"
+            className="text-lg font-semibold tracking-tight text-[var(--text)] transition-opacity hover:opacity-80"
           >
             DSVisualizer
           </Link>
-          <span className="text-sm text-[var(--text)]">
+          <span className="hidden text-sm text-[var(--text)] opacity-55 sm:inline">
             Data Structure Visualizer
           </span>
         </div>
-        <nav className="flex gap-1" aria-label="Data structure">
+        <nav className="flex gap-0.5" aria-label="Data structure">
           {STRUCTURES.map((name) => (
             <button
               key={name}
               type="button"
               onClick={() => handleStructureChange(name)}
-              className={`rounded px-3 py-1.5 text-sm transition-colors ${
+              className={`border-b-2 px-3 py-1.5 text-sm uppercase tracking-wide transition-colors ${
                 structure === name
-                  ? 'bg-[var(--accent)] text-[var(--bg)]'
-                  : 'text-[var(--text)] hover:bg-[var(--bg-elevated)]'
+                  ? 'border-[var(--accent)] text-[var(--text)]'
+                  : 'border-transparent text-[var(--text)] opacity-55 hover:opacity-100'
               }`}
             >
               {name}
@@ -256,31 +256,46 @@ export function VisualizerPage() {
 
       <div className="flex min-h-0 flex-1 flex-col">
         <section className="flex min-h-0 flex-[3] flex-col">
-          <div className="border-b border-[var(--border)] bg-[var(--bg-panel)] px-3 py-2">
-            <h2 className="text-xs font-medium uppercase tracking-wider text-[var(--text)]">
+          <div className="flex items-center gap-2 border-b border-[var(--border)] bg-[var(--bg-panel)] px-3 py-2">
+            <span
+              aria-hidden
+              className="inline-block h-1.5 w-1.5 rounded-full bg-[var(--accent)]"
+            />
+            <h2 className="text-xs font-medium uppercase tracking-[0.18em] text-[var(--text)]">
               Visualization — {structure}
             </h2>
           </div>
-          <div className="flex min-h-0 flex-1 items-center justify-center bg-[var(--bg)] p-6">
-            <StructureCanvas
-              structureId={structureId}
-              snapshot={snapshot}
-              hasStarted={index >= 0}
-            />
+          <div
+            className="relative flex min-h-0 flex-1 items-center justify-center bg-[var(--bg)] p-6"
+            style={{
+              backgroundImage:
+                'linear-gradient(color-mix(in srgb, var(--border) 35%, transparent) 1px, transparent 1px), linear-gradient(90deg, color-mix(in srgb, var(--border) 35%, transparent) 1px, transparent 1px)',
+              backgroundSize: '48px 48px',
+              backgroundPosition: 'center',
+            }}
+          >
+            <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,transparent_40%,var(--bg)_85%)]" />
+            <div className="relative z-10 flex h-full w-full items-center justify-center">
+              <StructureCanvas
+                structureId={structureId}
+                snapshot={snapshot}
+                hasStarted={index >= 0}
+              />
+            </div>
           </div>
         </section>
 
         <section className="flex min-h-0 flex-[2] flex-col border-t border-[var(--border)] md:flex-row">
           <div className="flex min-h-0 min-w-0 flex-1 flex-col">
             <div className="flex items-center justify-between border-b border-[var(--border)] bg-[var(--bg-panel)] px-3 py-2">
-              <h2 className="text-xs font-medium uppercase tracking-wider text-[var(--text)]">
+              <h2 className="text-xs font-medium uppercase tracking-[0.18em] text-[var(--text)]">
                 Editor
               </h2>
               <div className="flex gap-2">
                 <button
                   type="button"
                   disabled={busy}
-                  className="rounded bg-[var(--accent)] px-3 py-1 text-sm font-medium text-[var(--bg)] hover:bg-[var(--accent-hover)] disabled:cursor-not-allowed disabled:opacity-50"
+                  className="rounded-sm border border-[var(--accent)] bg-[color-mix(in_srgb,var(--accent)_18%,transparent)] px-3 py-1 text-sm font-medium text-[var(--text)] transition-colors hover:bg-[color-mix(in_srgb,var(--accent)_30%,transparent)] disabled:cursor-not-allowed disabled:opacity-50"
                   onClick={handleRun}
                 >
                   Run
@@ -288,21 +303,21 @@ export function VisualizerPage() {
                 <button
                   type="button"
                   disabled={busy}
-                  className="rounded border border-[var(--border)] px-3 py-1 text-sm text-[var(--text)] hover:bg-[var(--bg-elevated)] disabled:cursor-not-allowed disabled:opacity-50"
+                  className="rounded-sm border border-[var(--border)] px-3 py-1 text-sm text-[var(--text)] transition-colors hover:border-[var(--accent)] hover:bg-[var(--bg-elevated)] disabled:cursor-not-allowed disabled:opacity-50"
                   onClick={handleStep}
                 >
                   Step
                 </button>
                 <button
                   type="button"
-                  className="rounded border border-[var(--border)] px-3 py-1 text-sm text-[var(--text)] hover:bg-[var(--bg-elevated)]"
+                  className="rounded-sm border border-[var(--border)] px-3 py-1 text-sm text-[var(--text)] transition-colors hover:border-[var(--accent)] hover:bg-[var(--bg-elevated)]"
                   onClick={handleReset}
                 >
                   Reset
                 </button>
               </div>
             </div>
-            <div className="min-h-0 flex-1">
+            <div className="min-h-0 flex-1 border-l-2 border-[var(--accent)]">
               <CodeEditor
                 value={code}
                 onChange={handleCodeChange}
@@ -320,8 +335,9 @@ export function VisualizerPage() {
       </div>
 
       <footer
-        className={`border-t border-[var(--border)] bg-[var(--bg-panel)] px-4 py-2 text-sm ${statusTone}`}
+        className={`border-t border-[var(--border)] bg-[var(--bg-panel)] px-4 py-2 text-sm text-[var(--text)] ${statusTone}`}
       >
+        <span className="mr-2 opacity-55">&gt;</span>
         {status}
       </footer>
     </div>
