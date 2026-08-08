@@ -225,16 +225,20 @@ export function VisualizerPage() {
   return (
     <div className="flex h-full min-h-0 flex-col bg-[var(--bg)] font-[family-name:var(--mono)] text-[var(--text)]">
       <header className="flex items-center justify-between border-b border-[var(--border)] bg-[var(--bg-panel)] px-4 py-3">
-        <div className="flex items-baseline gap-3">
+        <div className="flex items-center gap-3">
           <Link
             to="/"
             className="text-lg font-semibold tracking-tight text-[var(--text)] transition-opacity hover:opacity-80"
           >
             DSVisualizer
           </Link>
-          <span className="hidden text-sm text-[var(--text)] opacity-55 sm:inline">
-            Data Structure Visualizer
-          </span>
+          <span
+            aria-hidden
+            className="inline-block h-1.5 w-1.5 rounded-full bg-[var(--accent)]"
+          />
+          <h1 className="text-sm font-medium uppercase tracking-[0.18em] text-[var(--text)]">
+            {structure}
+          </h1>
         </div>
         <nav className="flex gap-0.5" aria-label="Data structure">
           {STRUCTURES.map((name) => (
@@ -256,15 +260,6 @@ export function VisualizerPage() {
 
       <div className="flex min-h-0 flex-1 flex-col">
         <section className="flex min-h-0 flex-[3] flex-col">
-          <div className="flex items-center gap-2 border-b border-[var(--border)] bg-[var(--bg-panel)] px-3 py-2">
-            <span
-              aria-hidden
-              className="inline-block h-1.5 w-1.5 rounded-full bg-[var(--accent)]"
-            />
-            <h2 className="text-xs font-medium uppercase tracking-[0.18em] text-[var(--text)]">
-              Visualization — {structure}
-            </h2>
-          </div>
           <div
             className="relative flex min-h-0 flex-1 items-center justify-center bg-[var(--bg)] p-6"
             style={{
