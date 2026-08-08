@@ -1,28 +1,20 @@
 import { Link } from 'react-router-dom'
 import { motion } from 'framer-motion'
+import { MatrixRain } from '../components/MatrixRain'
 
 const PREVIEW_VALUES = [3, 7, 1]
 
 export function HomePage() {
   return (
-    <div className="relative flex h-full min-h-0 flex-col overflow-hidden">
+    <div className="relative flex h-full min-h-0 flex-col overflow-hidden bg-[var(--bg)]">
+      <MatrixRain />
+
       <div
         aria-hidden
         className="pointer-events-none absolute inset-0"
         style={{
           background:
-            'radial-gradient(ellipse 90% 70% at 75% 50%, color-mix(in srgb, var(--accent) 20%, transparent), transparent 55%), linear-gradient(155deg, #0b1016 0%, var(--bg) 42%, #121a22 100%)',
-        }}
-      />
-      <div
-        aria-hidden
-        className="pointer-events-none absolute inset-0 opacity-[0.06]"
-        style={{
-          backgroundImage:
-            'linear-gradient(var(--border) 1px, transparent 1px), linear-gradient(90deg, var(--border) 1px, transparent 1px)',
-          backgroundSize: '56px 56px',
-          maskImage:
-            'radial-gradient(ellipse 75% 65% at 60% 50%, black, transparent)',
+            'radial-gradient(ellipse 80% 70% at 20% 45%, color-mix(in srgb, var(--bg) 78%, transparent), transparent 60%), radial-gradient(ellipse 70% 60% at 80% 55%, color-mix(in srgb, var(--bg) 55%, transparent), transparent 55%), linear-gradient(180deg, color-mix(in srgb, var(--bg) 35%, transparent) 0%, transparent 25%, transparent 75%, color-mix(in srgb, var(--bg) 55%, transparent) 100%)',
         }}
       />
 
@@ -30,7 +22,7 @@ export function HomePage() {
         aria-hidden
         className="pointer-events-none absolute inset-y-0 right-0 flex w-full max-w-xl items-center justify-center pr-6 opacity-40 md:opacity-70 lg:pr-20"
       >
-        <div className="absolute h-72 w-72 rounded-full bg-[color-mix(in_srgb,var(--accent)_16%,transparent)] blur-3xl" />
+        <div className="absolute h-72 w-72 rounded-full bg-[color-mix(in_srgb,var(--accent)_14%,transparent)] blur-3xl" />
         <div className="relative flex flex-col-reverse items-center gap-3">
           {PREVIEW_VALUES.map((value, index) => (
             <motion.div
@@ -49,7 +41,8 @@ export function HomePage() {
                   ? {
                       borderColor: 'var(--accent)',
                       background:
-                        'color-mix(in srgb, var(--accent) 24%, var(--bg-elevated))',
+                        'color-mix(in srgb, var(--accent) 22%, var(--bg-elevated))',
+                      boxShadow: '0 0 24px color-mix(in srgb, var(--accent) 18%, transparent)',
                     }
                   : undefined
               }
@@ -67,6 +60,9 @@ export function HomePage() {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.55, ease: 'easeOut' }}
             className="text-5xl font-semibold tracking-tight text-[var(--text-h)] md:text-6xl lg:text-7xl"
+            style={{
+              textShadow: '0 0 40px color-mix(in srgb, var(--accent) 25%, transparent)',
+            }}
           >
             DSVisualizer
           </motion.h1>

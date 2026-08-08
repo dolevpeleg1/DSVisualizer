@@ -1,15 +1,15 @@
 @import 'tailwindcss';
 
 :root {
-  --bg: #0f1419;
-  --bg-panel: #171d25;
-  --bg-elevated: #1e2630;
-  --border: #2a3441;
-  --text: #c5ced9;
-  --text-h: #f0f3f7;
-  --muted: #7a8796;
-  --accent: #3d9b8f;
-  --accent-hover: #4db3a5;
+  --bg: #060c09;
+  --bg-panel: #0c1611;
+  --bg-elevated: #122018;
+  --border: #1e3328;
+  --text: #a8c4b0;
+  --text-h: #d8ecde;
+  --muted: #6a8a74;
+  --accent: #6bb38a;
+  --accent-hover: #82c79d;
   --danger: #d96b6b;
   --mono: 'IBM Plex Mono', ui-monospace, Consolas, monospace;
   --sans: 'IBM Plex Sans', system-ui, sans-serif;
