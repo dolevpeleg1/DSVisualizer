@@ -1,4 +1,5 @@
-import type { ApplyResult, Snapshot, StackOp, Value } from './types'
+import { createItemId } from './ids'
+import type { ApplyResult, CellItem, Snapshot, StackOp } from './types'
 
 /** Items are bottom → top (last index is the top). */
 export function createEmpty(): Snapshot {
@@ -10,7 +11,7 @@ export function apply(state: Snapshot, op: StackOp): ApplyResult {
 
   switch (op.type) {
     case 'push': {
-      const nextItems = [...items, op.value]
+      const nextItems = [...items, { id: createItemId(), value: op.value }]
       const highlight = [nextItems.length - 1]
       return {
         next: { items: nextItems, highlight, message: `push(${op.value})` },
@@ -25,15 +26,15 @@ export function apply(state: Snapshot, op: StackOp): ApplyResult {
       if (items.length === 0) {
         return errorResult(items, 'Cannot pop from an empty stack')
       }
-      const value = items[items.length - 1] as Value
+      const top = items[items.length - 1] as CellItem
       const highlight = [items.length - 1]
       const nextItems = items.slice(0, -1)
       return {
-        next: { items: nextItems, message: `pop() → ${value}` },
+        next: { items: nextItems, message: `pop() → ${top.value}` },
         event: {
           kind: 'ok',
-          message: `Popped ${value}`,
-          returnValue: value,
+          message: `Popped ${top.value}`,
+          returnValue: top.value,
           highlight,
         },
       }
@@ -42,14 +43,18 @@ export function apply(state: Snapshot, op: StackOp): ApplyResult {
       if (items.length === 0) {
         return errorResult(items, 'Cannot peek an empty stack')
       }
-      const value = items[items.length - 1] as Value
+      const top = items[items.length - 1] as CellItem
       const highlight = [items.length - 1]
       return {
-        next: { items: [...items], highlight, message: `peek() → ${value}` },
+        next: {
+          items: [...items],
+          highlight,
+          message: `peek() → ${top.value}`,
+        },
         event: {
           kind: 'ok',
-          message: `Peeked ${value}`,
-          returnValue: value,
+          message: `Peeked ${top.value}`,
+          returnValue: top.value,
           highlight,
         },
       }
@@ -57,7 +62,7 @@ export function apply(state: Snapshot, op: StackOp): ApplyResult {
   }
 }
 
-function errorResult(items: Value[], message: string): ApplyResult {
+function errorResult(items: CellItem[], message: string): ApplyResult {
   return {
     next: { items: [...items], error: message },
     event: { kind: 'error', message },

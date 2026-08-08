@@ -17,11 +17,11 @@ export function ArrayView({ snapshot }: ArrayViewProps) {
       </div>
       <div className="flex max-w-xl flex-wrap items-end justify-center gap-2">
         <AnimatePresence initial={false} mode="popLayout">
-          {items.map((value, index) => (
+          {items.map((item, index) => (
             <Cell
-              key={`${index}-${value}-${items.length}`}
-              layoutId={`array-${index}-${value}`}
-              value={value}
+              key={item.id}
+              layoutId={item.id}
+              value={item.value}
               index={index}
               active={highlight.includes(index) || errorIndexes.includes(index)}
               error={errorIndexes.includes(index)}

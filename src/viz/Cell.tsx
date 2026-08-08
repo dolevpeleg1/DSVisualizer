@@ -22,7 +22,7 @@ export function Cell({ value, index, active = false, error = false, layoutId }: 
       initial={{ opacity: 0, scale: 0.85 }}
       animate={{ opacity: 1, scale: 1 }}
       exit={{ opacity: 0, scale: 0.85 }}
-      transition={{ type: 'spring', stiffness: 380, damping: 28 }}
+      transition={{ type: 'spring', stiffness: 160, damping: 24, mass: 1.1 }}
       className={`flex min-w-14 flex-col items-center justify-center rounded-md border px-3 py-2 font-[family-name:var(--mono)] ${tone}`}
     >
       {typeof index === 'number' ? (

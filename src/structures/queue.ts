@@ -1,4 +1,5 @@
-import type { ApplyResult, QueueOp, Snapshot, Value } from './types'
+import { createItemId } from './ids'
+import type { ApplyResult, CellItem, QueueOp, Snapshot } from './types'
 
 /** Items are front → back (index 0 is the front). */
 export function createEmpty(): Snapshot {
@@ -10,7 +11,7 @@ export function apply(state: Snapshot, op: QueueOp): ApplyResult {
 
   switch (op.type) {
     case 'enqueue': {
-      const nextItems = [...items, op.value]
+      const nextItems = [...items, { id: createItemId(), value: op.value }]
       const highlight = [nextItems.length - 1]
       return {
         next: {
@@ -29,15 +30,15 @@ export function apply(state: Snapshot, op: QueueOp): ApplyResult {
       if (items.length === 0) {
         return errorResult(items, 'Cannot dequeue from an empty queue')
       }
-      const value = items[0] as Value
+      const front = items[0] as CellItem
       const highlight = [0]
       const nextItems = items.slice(1)
       return {
-        next: { items: nextItems, message: `dequeue() → ${value}` },
+        next: { items: nextItems, message: `dequeue() → ${front.value}` },
         event: {
           kind: 'ok',
-          message: `Dequeued ${value}`,
-          returnValue: value,
+          message: `Dequeued ${front.value}`,
+          returnValue: front.value,
           highlight,
         },
       }
@@ -46,14 +47,18 @@ export function apply(state: Snapshot, op: QueueOp): ApplyResult {
       if (items.length === 0) {
         return errorResult(items, 'Cannot read front of an empty queue')
       }
-      const value = items[0] as Value
+      const front = items[0] as CellItem
       const highlight = [0]
       return {
-        next: { items: [...items], highlight, message: `front() → ${value}` },
+        next: {
+          items: [...items],
+          highlight,
+          message: `front() → ${front.value}`,
+        },
         event: {
           kind: 'ok',
-          message: `Front is ${value}`,
-          returnValue: value,
+          message: `Front is ${front.value}`,
+          returnValue: front.value,
           highlight,
         },
       }
@@ -61,7 +66,7 @@ export function apply(state: Snapshot, op: QueueOp): ApplyResult {
   }
 }
 
-function errorResult(items: Value[], message: string): ApplyResult {
+function errorResult(items: CellItem[], message: string): ApplyResult {
   return {
     next: { items: [...items], error: message },
     event: { kind: 'error', message },

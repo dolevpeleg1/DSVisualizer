@@ -2,6 +2,7 @@ export type {
   ApplyEvent,
   ApplyResult,
   ArrayOp,
+  CellItem,
   Frame,
   Op,
   QueueOp,

@@ -31,7 +31,7 @@ insert(1, 15)
 remove(0)`,
 }
 
-const PLAY_INTERVAL_MS = 600
+const PLAY_INTERVAL_MS = 1100
 
 type Mode = 'idle' | 'playing' | 'paused' | 'done' | 'error'
 
@@ -240,8 +240,23 @@ function App() {
         </nav>
       </header>
 
-      <div className="grid min-h-0 flex-1 grid-cols-1 md:grid-cols-2">
-        <section className="flex min-h-0 flex-col border-b border-[var(--border)] md:border-b-0 md:border-r">
+      <div className="flex min-h-0 flex-1 flex-col">
+        <section className="flex min-h-0 flex-[3] flex-col">
+          <div className="border-b border-[var(--border)] bg-[var(--bg-panel)] px-3 py-2">
+            <h2 className="text-xs font-medium uppercase tracking-wider text-[var(--muted)]">
+              Visualization — {structure}
+            </h2>
+          </div>
+          <div className="flex min-h-0 flex-1 items-center justify-center bg-[var(--bg)] p-6">
+            <StructureCanvas
+              structureId={structureId}
+              snapshot={snapshot}
+              hasStarted={index >= 0}
+            />
+          </div>
+        </section>
+
+        <section className="flex min-h-0 flex-[2] flex-col border-t border-[var(--border)]">
           <div className="flex items-center justify-between border-b border-[var(--border)] bg-[var(--bg-panel)] px-3 py-2">
             <h2 className="text-xs font-medium uppercase tracking-wider text-[var(--muted)]">
               Editor
@@ -272,28 +287,13 @@ function App() {
               </button>
             </div>
           </div>
-          <div className="min-h-[240px] flex-1 md:min-h-0">
+          <div className="min-h-0 flex-1">
             <CodeEditor
               value={code}
               onChange={handleCodeChange}
               activeLine={activeLine}
               errorLines={errorLines}
               readOnly={busy}
-            />
-          </div>
-        </section>
-
-        <section className="flex min-h-0 flex-col">
-          <div className="border-b border-[var(--border)] bg-[var(--bg-panel)] px-3 py-2">
-            <h2 className="text-xs font-medium uppercase tracking-wider text-[var(--muted)]">
-              Visualization — {structure}
-            </h2>
-          </div>
-          <div className="flex flex-1 items-center justify-center bg-[var(--bg)] p-6">
-            <StructureCanvas
-              structureId={structureId}
-              snapshot={snapshot}
-              hasStarted={index >= 0}
             />
           </div>
         </section>

@@ -15,11 +15,11 @@ export function StackView({ snapshot }: StackViewProps) {
       <div className="text-xs uppercase tracking-wider text-[var(--muted)]">Top</div>
       <div className="flex flex-col-reverse items-center gap-2">
         <AnimatePresence initial={false} mode="popLayout">
-          {items.map((value, index) => (
+          {items.map((item, index) => (
             <Cell
-              key={`${index}-${value}-${items.length}`}
-              layoutId={`stack-${index}-${value}`}
-              value={value}
+              key={item.id}
+              layoutId={item.id}
+              value={item.value}
               active={highlight.includes(index)}
               error={Boolean(error) && index === top}
             />

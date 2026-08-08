@@ -3,6 +3,12 @@ export type StructureId = 'stack' | 'queue' | 'array'
 /** MVP values are numbers (matches sample scripts). */
 export type Value = number
 
+/** Snapshot cell with a stable id for animation identity. */
+export type CellItem = {
+  id: string
+  value: Value
+}
+
 export type StackOp =
   | { type: 'push'; value: Value }
   | { type: 'pop' }
@@ -23,7 +29,7 @@ export type ArrayOp =
 export type Op = StackOp | QueueOp | ArrayOp
 
 export type Snapshot = {
-  items: Value[]
+  items: CellItem[]
   highlight?: number[]
   message?: string
   error?: string

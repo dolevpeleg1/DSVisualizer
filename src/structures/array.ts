@@ -1,4 +1,5 @@
-import type { ApplyResult, ArrayOp, Snapshot, Value } from './types'
+import { createItemId } from './ids'
+import type { ApplyResult, ArrayOp, CellItem, Snapshot } from './types'
 
 export function createEmpty(): Snapshot {
   return { items: [] }
@@ -9,7 +10,7 @@ export function apply(state: Snapshot, op: ArrayOp): ApplyResult {
 
   switch (op.type) {
     case 'append': {
-      const nextItems = [...items, op.value]
+      const nextItems = [...items, { id: createItemId(), value: op.value }]
       const highlight = [nextItems.length - 1]
       return {
         next: {
@@ -34,7 +35,7 @@ export function apply(state: Snapshot, op: ArrayOp): ApplyResult {
       }
       const nextItems = [
         ...items.slice(0, op.index),
-        op.value,
+        { id: createItemId(), value: op.value },
         ...items.slice(op.index),
       ]
       const highlight = [op.index]
@@ -59,7 +60,7 @@ export function apply(state: Snapshot, op: ArrayOp): ApplyResult {
           [op.index],
         )
       }
-      const value = items[op.index] as Value
+      const removed = items[op.index] as CellItem
       const nextItems = [
         ...items.slice(0, op.index),
         ...items.slice(op.index + 1),
@@ -67,12 +68,12 @@ export function apply(state: Snapshot, op: ArrayOp): ApplyResult {
       return {
         next: {
           items: nextItems,
-          message: `remove(${op.index}) → ${value}`,
+          message: `remove(${op.index}) → ${removed.value}`,
         },
         event: {
           kind: 'ok',
-          message: `Removed ${value} at index ${op.index}`,
-          returnValue: value,
+          message: `Removed ${removed.value} at index ${op.index}`,
+          returnValue: removed.value,
           highlight: [op.index],
         },
       }
@@ -85,8 +86,9 @@ export function apply(state: Snapshot, op: ArrayOp): ApplyResult {
           [op.index],
         )
       }
+      const current = items[op.index] as CellItem
       const nextItems = [...items]
-      nextItems[op.index] = op.value
+      nextItems[op.index] = { id: current.id, value: op.value }
       const highlight = [op.index]
       return {
         next: {
@@ -109,18 +111,18 @@ export function apply(state: Snapshot, op: ArrayOp): ApplyResult {
           [op.index],
         )
       }
-      const value = items[op.index] as Value
+      const item = items[op.index] as CellItem
       const highlight = [op.index]
       return {
         next: {
           items: [...items],
           highlight,
-          message: `get(${op.index}) → ${value}`,
+          message: `get(${op.index}) → ${item.value}`,
         },
         event: {
           kind: 'ok',
-          message: `Got ${value} at index ${op.index}`,
-          returnValue: value,
+          message: `Got ${item.value} at index ${op.index}`,
+          returnValue: item.value,
           highlight,
         },
       }
@@ -138,7 +140,7 @@ function isValidInsertIndex(index: number, length: number): boolean {
 }
 
 function errorResult(
-  items: Value[],
+  items: CellItem[],
   message: string,
   highlight?: number[],
 ): ApplyResult {

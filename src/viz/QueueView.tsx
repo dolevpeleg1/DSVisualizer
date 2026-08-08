@@ -17,11 +17,11 @@ export function QueueView({ snapshot }: QueueViewProps) {
       </div>
       <div className="flex min-h-16 w-full max-w-xl flex-wrap items-center justify-center gap-2">
         <AnimatePresence initial={false} mode="popLayout">
-          {items.map((value, index) => (
+          {items.map((item, index) => (
             <Cell
-              key={`${index}-${value}-${items.length}`}
-              layoutId={`queue-${index}-${value}`}
-              value={value}
+              key={item.id}
+              layoutId={item.id}
+              value={item.value}
               active={highlight.includes(index)}
               error={Boolean(error) && index === 0}
             />
