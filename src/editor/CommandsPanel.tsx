@@ -23,6 +23,11 @@ const COMMANDS: Record<StructureId, Command[]> = {
     { signature: 'set(index, value)', description: 'Replace value at index' },
     { signature: 'get(index)', description: 'Return value at index' },
   ],
+  tree: [
+    { signature: 'insert(value)', description: 'Insert value into the BST' },
+    { signature: 'delete(value)', description: 'Remove value from the BST' },
+    { signature: 'find(value)', description: 'Search for value and highlight the path' },
+  ],
 }
 
 type CommandsPanelProps = {

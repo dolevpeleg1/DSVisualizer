@@ -3,7 +3,8 @@ import { parse, run } from './engine'
 import { apply as applyArray, createEmpty as emptyArray } from './structures/array'
 import { apply as applyQueue, createEmpty as emptyQueue } from './structures/queue'
 import { apply as applyStack, createEmpty as emptyStack } from './structures/stack'
-import type { CellItem } from './structures/types'
+import { apply as applyTree, createEmpty as emptyTree } from './structures/tree'
+import type { CellItem, TreeNode } from './structures/types'
 
 function values(items: CellItem[]): number[] {
   return items.map((item) => item.value)
@@ -192,6 +193,60 @@ describe('array', () => {
   })
 })
 
+describe('tree', () => {
+  function collect(root: TreeNode | null | undefined): number[] {
+    if (!root) return []
+    return [...collect(root.left), root.value, ...collect(root.right)]
+  }
+
+  it('starts empty', () => {
+    expect(emptyTree()).toEqual({ items: [], root: null })
+  })
+
+  it('insert builds a BST in sorted order', () => {
+    let state = emptyTree()
+    state = applyTree(state, { type: 'insert', value: 8 }).next
+    state = applyTree(state, { type: 'insert', value: 3 }).next
+    state = applyTree(state, { type: 'insert', value: 10 }).next
+    state = applyTree(state, { type: 'insert', value: 1 }).next
+    state = applyTree(state, { type: 'insert', value: 6 }).next
+    expect(collect(state.root)).toEqual([1, 3, 6, 8, 10])
+  })
+
+  it('find returns the value and highlights a path', () => {
+    let state = emptyTree()
+    state = applyTree(state, { type: 'insert', value: 8 }).next
+    state = applyTree(state, { type: 'insert', value: 3 }).next
+    state = applyTree(state, { type: 'insert', value: 6 }).next
+
+    const found = applyTree(state, { type: 'find', value: 6 })
+    expect(found.event.kind).toBe('ok')
+    expect(found.event.returnValue).toBe(6)
+    expect(found.next.highlightIds?.length).toBeGreaterThan(0)
+  })
+
+  it('delete removes a value from the BST', () => {
+    let state = emptyTree()
+    state = applyTree(state, { type: 'insert', value: 8 }).next
+    state = applyTree(state, { type: 'insert', value: 3 }).next
+    state = applyTree(state, { type: 'insert', value: 10 }).next
+
+    const deleted = applyTree(state, { type: 'delete', value: 3 })
+    expect(deleted.event.kind).toBe('ok')
+    expect(deleted.event.returnValue).toBe(3)
+    expect(collect(deleted.next.root)).toEqual([8, 10])
+  })
+
+  it('errors on duplicate insert and missing find/delete', () => {
+    let state = emptyTree()
+    state = applyTree(state, { type: 'insert', value: 5 }).next
+
+    expect(applyTree(state, { type: 'insert', value: 5 }).event.kind).toBe('error')
+    expect(applyTree(state, { type: 'find', value: 9 }).event.kind).toBe('error')
+    expect(applyTree(state, { type: 'delete', value: 9 }).event.kind).toBe('error')
+  })
+})
+
 describe('parse', () => {
   it('parses stack sample scripts', () => {
     const result = parse(
@@ -212,6 +267,24 @@ peek()`,
       { line: 4, op: { type: 'push', value: 1 } },
       { line: 5, op: { type: 'pop' } },
       { line: 6, op: { type: 'peek' } },
+    ])
+  })
+
+  it('parses tree sample scripts', () => {
+    const result = parse(
+      `insert(8)
+insert(3)
+find(3)
+delete(3)`,
+      'tree',
+    )
+    expect(result.ok).toBe(true)
+    if (!result.ok) return
+    expect(result.ops.map((op) => op.op)).toEqual([
+      { type: 'insert', value: 8 },
+      { type: 'insert', value: 3 },
+      { type: 'find', value: 3 },
+      { type: 'delete', value: 3 },
     ])
   })
 

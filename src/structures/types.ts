@@ -1,4 +1,4 @@
-export type StructureId = 'stack' | 'queue' | 'array'
+export type StructureId = 'stack' | 'queue' | 'array' | 'tree'
 
 /** MVP values are numbers (matches sample scripts). */
 export type Value = number
@@ -7,6 +7,14 @@ export type Value = number
 export type CellItem = {
   id: string
   value: Value
+}
+
+/** Binary tree node with stable id for animation identity. */
+export type TreeNode = {
+  id: string
+  value: Value
+  left: TreeNode | null
+  right: TreeNode | null
 }
 
 export type StackOp =
@@ -26,11 +34,20 @@ export type ArrayOp =
   | { type: 'set'; index: number; value: Value }
   | { type: 'get'; index: number }
 
-export type Op = StackOp | QueueOp | ArrayOp
+export type TreeOp =
+  | { type: 'insert'; value: Value }
+  | { type: 'delete'; value: Value }
+  | { type: 'find'; value: Value }
+
+export type Op = StackOp | QueueOp | ArrayOp | TreeOp
 
 export type Snapshot = {
   items: CellItem[]
+  /** Present for tree structure (null = empty tree). */
+  root?: TreeNode | null
   highlight?: number[]
+  /** Node ids to emphasize (trees). */
+  highlightIds?: string[]
   message?: string
   error?: string
 }
@@ -40,6 +57,7 @@ export type ApplyEvent = {
   message: string
   returnValue?: Value
   highlight?: number[]
+  highlightIds?: string[]
 }
 
 export type ApplyResult = {

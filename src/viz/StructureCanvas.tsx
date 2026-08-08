@@ -2,6 +2,7 @@ import type { Snapshot, StructureId } from '../structures/types'
 import { ArrayView } from './ArrayView'
 import { QueueView } from './QueueView'
 import { StackView } from './StackView'
+import { TreeView } from './TreeView'
 
 type StructureCanvasProps = {
   structureId: StructureId
@@ -29,5 +30,7 @@ export function StructureCanvas({
       return <QueueView snapshot={snapshot} />
     case 'array':
       return <ArrayView snapshot={snapshot} />
+    case 'tree':
+      return <TreeView snapshot={snapshot} />
   }
 }

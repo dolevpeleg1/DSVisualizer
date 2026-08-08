@@ -6,13 +6,14 @@ import { parse, run } from '../engine'
 import type { Frame, StructureId } from '../structures/types'
 import { StructureCanvas } from '../viz/StructureCanvas'
 
-const STRUCTURES = ['Stack', 'Queue', 'Array'] as const
+const STRUCTURES = ['Stack', 'Queue', 'Array', 'Tree'] as const
 type StructureName = (typeof STRUCTURES)[number]
 
 const STRUCTURE_IDS: Record<StructureName, StructureId> = {
   Stack: 'stack',
   Queue: 'queue',
   Array: 'array',
+  Tree: 'tree',
 }
 
 const DEFAULT_CODE: Record<StructureName, string> = {
@@ -31,6 +32,14 @@ append(10)
 append(20)
 insert(1, 15)
 remove(0)`,
+  Tree: `// Binary search tree
+insert(8)
+insert(3)
+insert(10)
+insert(1)
+insert(6)
+find(6)
+delete(3)`,
 }
 
 const PLAY_INTERVAL_MS = 1100

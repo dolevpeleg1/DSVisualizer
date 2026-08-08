@@ -1,6 +1,7 @@
 import * as arrayModel from '../structures/array'
 import * as queueModel from '../structures/queue'
 import * as stackModel from '../structures/stack'
+import * as treeModel from '../structures/tree'
 import type {
   ArrayOp,
   Frame,
@@ -8,6 +9,7 @@ import type {
   Snapshot,
   StackOp,
   StructureId,
+  TreeOp,
 } from '../structures/types'
 import type { ParsedOp } from './parse'
 
@@ -41,6 +43,8 @@ function createEmpty(structureId: StructureId): Snapshot {
       return queueModel.createEmpty()
     case 'array':
       return arrayModel.createEmpty()
+    case 'tree':
+      return treeModel.createEmpty()
   }
 }
 
@@ -56,5 +60,7 @@ function applyOp(
       return queueModel.apply(state, op as QueueOp)
     case 'array':
       return arrayModel.apply(state, op as ArrayOp)
+    case 'tree':
+      return treeModel.apply(state, op as TreeOp)
   }
 }

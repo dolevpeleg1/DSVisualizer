@@ -74,6 +74,20 @@ const OP_SPECS: Record<StructureId, Record<string, OpSpec>> = {
       build: ([index]) => ({ type: 'get', index: index as number }),
     },
   },
+  tree: {
+    insert: {
+      arity: 1,
+      build: ([value]) => ({ type: 'insert', value: value as number }),
+    },
+    delete: {
+      arity: 1,
+      build: ([value]) => ({ type: 'delete', value: value as number }),
+    },
+    find: {
+      arity: 1,
+      build: ([value]) => ({ type: 'find', value: value as number }),
+    },
+  },
 }
 
 const CALL_RE = /^([A-Za-z_]\w*)\s*\((.*)\)\s*$/
