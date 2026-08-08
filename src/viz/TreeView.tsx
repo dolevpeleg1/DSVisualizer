@@ -116,7 +116,7 @@ export function TreeView({ snapshot }: TreeViewProps) {
     return (
       <p
         className={`text-sm ${
-          hasError ? 'text-[var(--danger)]' : 'text-[var(--muted)]'
+          hasError ? 'text-[var(--danger)]' : 'text-[var(--text)]'
         }`}
       >
         Empty tree
@@ -128,7 +128,7 @@ export function TreeView({ snapshot }: TreeViewProps) {
 
   return (
     <div className="flex h-full w-full flex-col items-center justify-center gap-3 overflow-auto p-2">
-      <div className="text-xs uppercase tracking-wider text-[var(--muted)]">
+      <div className="text-xs uppercase tracking-wider text-[var(--text)]">
         Binary search tree
       </div>
       <div
@@ -175,9 +175,9 @@ export function TreeView({ snapshot }: TreeViewProps) {
                 transition={NODE_ENTER}
                 className={`absolute flex items-center justify-center rounded-full border font-[family-name:var(--mono)] text-sm font-medium ${
                   error
-                    ? 'border-[var(--danger)] bg-[color-mix(in_srgb,var(--danger)_18%,var(--bg-elevated))] text-[var(--text-h)]'
+                    ? 'border-[var(--danger)] bg-[color-mix(in_srgb,var(--danger)_18%,var(--bg-elevated))] text-[var(--text)]'
                     : active
-                      ? 'border-[var(--accent)] bg-[color-mix(in_srgb,var(--accent)_22%,var(--bg-elevated))] text-[var(--text-h)]'
+                      ? 'border-[var(--accent)] bg-[color-mix(in_srgb,var(--accent)_22%,var(--bg-elevated))] text-[var(--text)]'
                       : 'border-[var(--border)] bg-[var(--bg-elevated)] text-[var(--text)]'
                 }`}
                 style={{

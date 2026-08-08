@@ -12,7 +12,7 @@ export function ArrayView({ snapshot }: ArrayViewProps) {
 
   return (
     <div className="flex h-full w-full flex-col items-center justify-center gap-4">
-      <div className="text-xs uppercase tracking-wider text-[var(--muted)]">
+      <div className="text-xs uppercase tracking-wider text-[var(--text)]">
         Indexed array
       </div>
       <div className="flex max-w-xl flex-wrap items-end justify-center gap-2">
@@ -31,7 +31,7 @@ export function ArrayView({ snapshot }: ArrayViewProps) {
         {items.length === 0 ? (
           <p
             className={`text-sm ${
-              error ? 'text-[var(--danger)]' : 'text-[var(--muted)]'
+              error ? 'text-[var(--danger)]' : 'text-[var(--text)]'
             }`}
           >
             Empty array

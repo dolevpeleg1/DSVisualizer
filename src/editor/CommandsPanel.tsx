@@ -40,7 +40,7 @@ export function CommandsPanel({ structureId }: CommandsPanelProps) {
   return (
     <div className="flex h-full min-h-0 flex-col bg-[var(--bg-panel)]">
       <div className="border-b border-[var(--border)] px-3 py-2">
-        <h2 className="text-xs font-medium uppercase tracking-wider text-[var(--muted)]">
+        <h2 className="text-xs font-medium uppercase tracking-wider text-[var(--text)]">
           Commands
         </h2>
       </div>
@@ -50,11 +50,11 @@ export function CommandsPanel({ structureId }: CommandsPanelProps) {
             <code className="block font-[family-name:var(--mono)] text-sm text-[var(--accent)]">
               {command.signature}
             </code>
-            <p className="mt-0.5 text-xs text-[var(--muted)]">{command.description}</p>
+            <p className="mt-0.5 text-xs text-[var(--text)]">{command.description}</p>
           </li>
         ))}
       </ul>
-      <p className="border-t border-[var(--border)] px-3 py-2 text-[11px] text-[var(--muted)]">
+      <p className="border-t border-[var(--border)] px-3 py-2 text-[11px] text-[var(--text)]">
         Arguments are numbers. Use <code className="text-[var(--text)]">//</code> for
         comments.
       </p>

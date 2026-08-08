@@ -35,7 +35,7 @@ export function HomePage() {
                 stiffness: 140,
                 damping: 22,
               }}
-              className="flex min-w-24 items-center justify-center rounded-md border border-[var(--border)] bg-[var(--bg-elevated)] px-6 py-4 font-[family-name:var(--mono)] text-2xl text-[var(--text-h)]"
+              className="flex min-w-24 items-center justify-center rounded-md border border-[var(--border)] bg-[var(--bg-elevated)] px-6 py-4 font-[family-name:var(--mono)] text-2xl text-[var(--text)]"
               style={
                 index === PREVIEW_VALUES.length - 1
                   ? {
@@ -59,7 +59,7 @@ export function HomePage() {
             initial={{ opacity: 0, y: 18 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.55, ease: 'easeOut' }}
-            className="text-5xl font-semibold tracking-tight text-[var(--text-h)] md:text-6xl lg:text-7xl"
+            className="text-5xl font-semibold tracking-tight text-[var(--text)] md:text-6xl lg:text-7xl"
             style={{
               textShadow: '0 0 40px color-mix(in srgb, var(--accent) 25%, transparent)',
             }}
@@ -71,7 +71,7 @@ export function HomePage() {
             initial={{ opacity: 0, y: 16 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.55, delay: 0.1, ease: 'easeOut' }}
-            className="mt-5 max-w-md text-lg leading-relaxed text-[var(--muted)]"
+            className="mt-5 max-w-md text-lg leading-relaxed text-[var(--text)]"
           >
             Write operations for data structures, then watch them update step by step.
           </motion.p>

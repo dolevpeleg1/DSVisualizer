@@ -17,7 +17,7 @@ export function StructureCanvas({
 }: StructureCanvasProps) {
   if (!hasStarted || !snapshot) {
     return (
-      <p className="max-w-sm text-center text-sm text-[var(--muted)]">
+      <p className="max-w-sm text-center text-sm text-[var(--text)]">
         Run or Step to visualize.
       </p>
     )

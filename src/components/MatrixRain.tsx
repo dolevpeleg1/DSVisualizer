@@ -65,7 +65,7 @@ export function MatrixRain() {
       const dt = Math.min((time - lastTime) / 16.67, 2.5)
       lastTime = time
 
-      ctx.fillStyle = '#060c09'
+      ctx.fillStyle = '#040806'
       ctx.fillRect(0, 0, width, height)
 
       ctx.font = `${fontSize}px "IBM Plex Mono", ui-monospace, monospace`
@@ -93,10 +93,10 @@ export function MatrixRain() {
           const head = i === 0
           const fade = 1 - i / col.length
           if (head) {
-            ctx.fillStyle = 'rgba(210, 245, 220, 0.85)'
+            ctx.fillStyle = 'rgba(220, 250, 230, 0.95)'
           } else {
-            const alpha = 0.16 + fade * 0.42
-            ctx.fillStyle = `rgba(120, 200, 145, ${alpha})`
+            const alpha = 0.22 + fade * 0.5
+            ctx.fillStyle = `rgba(130, 220, 155, ${alpha})`
           }
           ctx.fillText(col.chars[i]!, col.x, charY)
         }
@@ -110,14 +110,14 @@ export function MatrixRain() {
 
     const paintStatic = () => {
       const { clientWidth: width, clientHeight: height } = canvas
-      ctx.fillStyle = '#060c09'
+      ctx.fillStyle = '#040806'
       ctx.fillRect(0, 0, width, height)
       ctx.font = `${fontSize}px "IBM Plex Mono", ui-monospace, monospace`
       ctx.textBaseline = 'top'
       for (const col of columns) {
         for (let i = 0; i < Math.min(col.length, 6); i++) {
           const fade = 1 - i / 6
-          ctx.fillStyle = `rgba(120, 200, 145, ${0.14 + fade * 0.22})`
+          ctx.fillStyle = `rgba(130, 220, 155, ${0.2 + fade * 0.28})`
           ctx.fillText(col.chars[i]!, col.x, (col.y % height) - i * fontSize)
         }
       }
@@ -126,7 +126,7 @@ export function MatrixRain() {
     if (reducedMotion.matches) {
       paintStatic()
     } else {
-      ctx.fillStyle = '#060c09'
+      ctx.fillStyle = '#040806'
       ctx.fillRect(0, 0, canvas.clientWidth, canvas.clientHeight)
       lastTime = performance.now()
       frameId = requestAnimationFrame(draw)

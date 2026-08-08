@@ -12,7 +12,7 @@ export function StackView({ snapshot }: StackViewProps) {
 
   return (
     <div className="flex h-full w-full flex-col items-center justify-end gap-3">
-      <div className="text-xs uppercase tracking-wider text-[var(--muted)]">Top</div>
+      <div className="text-xs uppercase tracking-wider text-[var(--text)]">Top</div>
       <div className="flex flex-col-reverse items-center gap-2">
         <AnimatePresence initial={false} mode="popLayout">
           {items.map((item, index) => (
@@ -27,9 +27,9 @@ export function StackView({ snapshot }: StackViewProps) {
         </AnimatePresence>
       </div>
       {items.length === 0 ? (
-        <p className="text-sm text-[var(--muted)]">Empty stack</p>
+        <p className="text-sm text-[var(--text)]">Empty stack</p>
       ) : (
-        <div className="text-xs uppercase tracking-wider text-[var(--muted)]">Bottom</div>
+        <div className="text-xs uppercase tracking-wider text-[var(--text)]">Bottom</div>
       )}
     </div>
   )

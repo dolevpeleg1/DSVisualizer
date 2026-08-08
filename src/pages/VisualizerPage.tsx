@@ -66,7 +66,7 @@ export function VisualizerPage() {
     if (mode === 'error' || currentFrame?.event.kind === 'error') {
       return 'text-[var(--danger)]'
     }
-    return 'text-[var(--muted)]'
+    return 'text-[var(--text)]'
   }, [mode, currentFrame])
 
   function clearPlaybackTimer() {
@@ -228,11 +228,11 @@ export function VisualizerPage() {
         <div className="flex items-baseline gap-3">
           <Link
             to="/"
-            className="text-lg font-semibold tracking-tight text-[var(--text-h)] hover:text-[var(--accent)]"
+            className="text-lg font-semibold tracking-tight text-[var(--text)] hover:text-[var(--accent)]"
           >
             DSVisualizer
           </Link>
-          <span className="text-sm text-[var(--muted)]">
+          <span className="text-sm text-[var(--text)]">
             Data Structure Visualizer
           </span>
         </div>
@@ -257,7 +257,7 @@ export function VisualizerPage() {
       <div className="flex min-h-0 flex-1 flex-col">
         <section className="flex min-h-0 flex-[3] flex-col">
           <div className="border-b border-[var(--border)] bg-[var(--bg-panel)] px-3 py-2">
-            <h2 className="text-xs font-medium uppercase tracking-wider text-[var(--muted)]">
+            <h2 className="text-xs font-medium uppercase tracking-wider text-[var(--text)]">
               Visualization — {structure}
             </h2>
           </div>
@@ -273,7 +273,7 @@ export function VisualizerPage() {
         <section className="flex min-h-0 flex-[2] flex-col border-t border-[var(--border)] md:flex-row">
           <div className="flex min-h-0 min-w-0 flex-1 flex-col">
             <div className="flex items-center justify-between border-b border-[var(--border)] bg-[var(--bg-panel)] px-3 py-2">
-              <h2 className="text-xs font-medium uppercase tracking-wider text-[var(--muted)]">
+              <h2 className="text-xs font-medium uppercase tracking-wider text-[var(--text)]">
                 Editor
               </h2>
               <div className="flex gap-2">

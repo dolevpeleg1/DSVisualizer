@@ -11,7 +11,7 @@ export function QueueView({ snapshot }: QueueViewProps) {
 
   return (
     <div className="flex h-full w-full flex-col items-center justify-center gap-4">
-      <div className="flex w-full max-w-xl items-center justify-between text-xs uppercase tracking-wider text-[var(--muted)]">
+      <div className="flex w-full max-w-xl items-center justify-between text-xs uppercase tracking-wider text-[var(--text)]">
         <span>Front</span>
         <span>Back</span>
       </div>
@@ -28,7 +28,7 @@ export function QueueView({ snapshot }: QueueViewProps) {
           ))}
         </AnimatePresence>
         {items.length === 0 ? (
-          <p className="text-sm text-[var(--muted)]">Empty queue</p>
+          <p className="text-sm text-[var(--text)]">Empty queue</p>
         ) : null}
       </div>
     </div>
