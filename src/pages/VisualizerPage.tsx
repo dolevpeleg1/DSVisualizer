@@ -126,6 +126,45 @@ export function VisualizerPage() {
     resetPlaybackState('Reset code')
   }
 
+  function handleClear() {
+    const firstLine = code.split('\n')[0] ?? ''
+    const comment = firstLine.trimStart().startsWith('//')
+      ? firstLine
+      : (DEFAULT_CODE[structure].split('\n')[0] ?? '//')
+    setCode(`${comment}\n`)
+    resetPlaybackState('Cleared editor')
+  }
+
+  function handleUndo() {
+    if (busy || index < 0 || frames.length === 0) return
+
+    clearPlaybackTimer()
+    const nextIndex = index - 1
+
+    if (nextIndex < 0) {
+      setIndex(-1)
+      setMode('paused')
+      setErrorLines([])
+      setStatus('Undone — back to start. Step or Run to continue.')
+      return
+    }
+
+    const frame = frames[nextIndex]
+    if (!frame) return
+
+    setIndex(nextIndex)
+    if (frame.event.kind === 'error') {
+      setMode('error')
+      setErrorLines([frame.line])
+      setStatus(`Runtime error on line ${frame.line}: ${frame.event.message}`)
+      return
+    }
+
+    setErrorLines([])
+    setMode(nextIndex >= frames.length - 1 ? 'done' : 'paused')
+    setStatus(formatFrameStatus(frame, nextIndex, frames.length))
+  }
+
   function handleStep() {
     if (busy) return
 
@@ -305,10 +344,26 @@ export function VisualizerPage() {
                 </button>
                 <button
                   type="button"
+                  disabled={busy || index < 0}
+                  className="rounded-sm border border-[var(--border)] px-3 py-1 text-sm text-[var(--text)] transition-colors hover:border-[var(--accent)] hover:bg-[var(--bg-elevated)] disabled:cursor-not-allowed disabled:opacity-50"
+                  onClick={handleUndo}
+                >
+                  Undo
+                </button>
+                <button
+                  type="button"
                   className="rounded-sm border border-[var(--border)] px-3 py-1 text-sm text-[var(--text)] transition-colors hover:border-[var(--accent)] hover:bg-[var(--bg-elevated)]"
                   onClick={handleReset}
                 >
                   Reset
+                </button>
+                <button
+                  type="button"
+                  disabled={busy}
+                  className="rounded-sm border border-[var(--border)] px-3 py-1 text-sm text-[var(--text)] transition-colors hover:border-[var(--accent)] hover:bg-[var(--bg-elevated)] disabled:cursor-not-allowed disabled:opacity-50"
+                  onClick={handleClear}
+                >
+                  Clear
                 </button>
               </div>
             </div>
