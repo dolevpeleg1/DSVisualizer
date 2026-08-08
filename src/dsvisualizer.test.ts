@@ -1,4 +1,5 @@
 import { describe, expect, it } from 'vitest'
+import { parse, run } from './engine'
 import { apply as applyArray, createEmpty as emptyArray } from './structures/array'
 import { apply as applyQueue, createEmpty as emptyQueue } from './structures/queue'
 import { apply as applyStack, createEmpty as emptyStack } from './structures/stack'
@@ -174,5 +175,150 @@ describe('array', () => {
       'error',
     )
     expect(applyArray(state, { type: 'get', index: 5 }).event.kind).toBe('error')
+  })
+})
+
+describe('parse', () => {
+  it('parses stack sample scripts', () => {
+    const result = parse(
+      `// Stack operations
+push(3)
+push(7)
+push(1)
+pop()
+peek()`,
+      'stack',
+    )
+
+    expect(result.ok).toBe(true)
+    if (!result.ok) return
+    expect(result.ops).toEqual([
+      { line: 2, op: { type: 'push', value: 3 } },
+      { line: 3, op: { type: 'push', value: 7 } },
+      { line: 4, op: { type: 'push', value: 1 } },
+      { line: 5, op: { type: 'pop' } },
+      { line: 6, op: { type: 'peek' } },
+    ])
+  })
+
+  it('parses queue and array sample scripts', () => {
+    const queue = parse(
+      `// Queue operations
+enqueue(3)
+enqueue(7)
+dequeue()`,
+      'queue',
+    )
+    expect(queue.ok).toBe(true)
+    if (!queue.ok) return
+    expect(queue.ops.map((op) => op.op)).toEqual([
+      { type: 'enqueue', value: 3 },
+      { type: 'enqueue', value: 7 },
+      { type: 'dequeue' },
+    ])
+
+    const array = parse(
+      `append(10)
+append(20)
+insert(1, 15)
+remove(0)`,
+      'array',
+    )
+    expect(array.ok).toBe(true)
+    if (!array.ok) return
+    expect(array.ops.map((op) => op.op)).toEqual([
+      { type: 'append', value: 10 },
+      { type: 'append', value: 20 },
+      { type: 'insert', index: 1, value: 15 },
+      { type: 'remove', index: 0 },
+    ])
+  })
+
+  it('ignores blank lines and comments', () => {
+    const result = parse(
+      `
+// comment
+push(1)
+
+push(2) // trailing comment
+`,
+      'stack',
+    )
+
+    expect(result.ok).toBe(true)
+    if (!result.ok) return
+    expect(result.ops).toHaveLength(2)
+    expect(result.ops[0]?.line).toBe(3)
+    expect(result.ops[1]?.line).toBe(5)
+  })
+
+  it('reports bad syntax, wrong arity, and disallowed ops', () => {
+    const result = parse(
+      `push
+pop(1)
+enqueue(3)
+push(x)`,
+      'stack',
+    )
+
+    expect(result.ok).toBe(false)
+    if (result.ok) return
+    expect(result.errors.map((error) => error.line)).toEqual([1, 2, 3, 4])
+    expect(result.errors[0]?.message).toMatch(/syntax/i)
+    expect(result.errors[1]?.message).toMatch(/expects 0/i)
+    expect(result.errors[2]?.message).toMatch(/Unknown operation "enqueue"/i)
+    expect(result.errors[3]?.message).toMatch(/numbers/i)
+  })
+})
+
+describe('run', () => {
+  it('builds a full frame timeline for a short stack script', () => {
+    const parsed = parse(
+      `push(3)
+push(7)
+pop()`,
+      'stack',
+    )
+    expect(parsed.ok).toBe(true)
+    if (!parsed.ok) return
+
+    const frames = run(parsed.ops, 'stack')
+    expect(frames).toHaveLength(3)
+    expect(frames.map((frame) => frame.line)).toEqual([1, 2, 3])
+    expect(frames[0]?.after.items).toEqual([3])
+    expect(frames[1]?.after.items).toEqual([3, 7])
+    expect(frames[2]?.event.returnValue).toBe(7)
+    expect(frames[2]?.after.items).toEqual([3])
+  })
+
+  it('stops after the first runtime error frame', () => {
+    const parsed = parse(
+      `pop()
+push(1)`,
+      'stack',
+    )
+    expect(parsed.ok).toBe(true)
+    if (!parsed.ok) return
+
+    const frames = run(parsed.ops, 'stack')
+    expect(frames).toHaveLength(1)
+    expect(frames[0]?.event.kind).toBe('error')
+    expect(frames[0]?.line).toBe(1)
+  })
+
+  it('preserves source line numbers through queue execution', () => {
+    const parsed = parse(
+      `// skip
+enqueue(3)
+
+dequeue()`,
+      'queue',
+    )
+    expect(parsed.ok).toBe(true)
+    if (!parsed.ok) return
+
+    const frames = run(parsed.ops, 'queue')
+    expect(frames.map((frame) => frame.line)).toEqual([2, 4])
+    expect(frames[1]?.event.returnValue).toBe(3)
   })
 })
